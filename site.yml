@@ -1,0 +1,32 @@
+---
+#Pre-setup tasks: install python for Ansible
+# - hosts: all
+#   gather_facts: False
+#   pre_tasks:
+#     - name: Install python for ansible CentOS
+#       raw: sudo yum -q -y update && sudo yum install -q -y python36 python36-pip
+#       register: output
+#       changed_when: output.stout != ""
+#     - name: gather facts for next task
+#       setup:
+#   tasks: []
+
+- hosts: all
+  tags: [common]
+  roles:
+    - common
+
+- hosts: prometheus
+  tags: [prometheusServer]
+  roles:
+    - prometheus
+
+- hosts: exporter
+  tags: [exporterServer]
+  roles:
+    - exporter
+
+- hosts: grafana
+  tags: [grafanaServer]
+  roles:
+    - grafana

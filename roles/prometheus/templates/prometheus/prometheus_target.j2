@@ -1,0 +1,12 @@
+[
+{% for exporter in targets.exporters %}
+  {
+    "targets": ["{{exporter.addr}}"],
+    "labels": {
+        "hostname": "{{exporter.hostname}}",
+        "type": "{{exporter.type}}",
+        "zone": "{{exporter.zone}}"
+    }
+  }{% if not loop.last %},{% endif %}
+{% endfor %}
+]

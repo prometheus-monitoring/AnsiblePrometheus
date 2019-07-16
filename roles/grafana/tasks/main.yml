@@ -1,0 +1,57 @@
+---
+
+- name: Install libraries support grafana
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - initscripts
+    - fontconfig
+    - glibc
+    # - libfontenc
+    - freetype
+    - zlib
+    - http://mirror.centos.org/centos/7/os/x86_64/Packages/libfontenc-1.1.3-3.el7.x86_64.rpm
+    - http://mirror.centos.org/centos/7/os/x86_64/Packages/xorg-x11-font-utils-7.5-21.el7.x86_64.rpm
+    - http://mirror.centos.org/centos/7/os/x86_64/Packages/urw-fonts-2.4-16.el7.noarch.rpm
+
+- name: Install grafana
+  yum:
+    name: https://dl.grafana.com/oss/release/grafana-{{ grafana_version }}-1.x86_64.rpm
+    state: present
+
+- name: Ensure grafana running
+  systemd:
+    name: grafana-server
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    masked: no
+
+- name: Add datasource
+  grafana_datasource:
+    name: "{{ datasource_name }}"
+    grafana_url: "{{ grafana_url }}"
+    ds_type: prometheus
+    url: "{{ datasource_url }}"
+    # basic_auth: yes
+    # basic_auth_user: grafana
+    # basic_auth_password: xxxxxxxx
+    state: present
+
+- name: Copy file dashboard json to /tem
+  copy:
+    src: grafana/{{ item }}
+    dest: /tmp/{{ item }}
+  with_items:
+    - mainboard.json
+
+- name: Update dashboard
+  grafana_dashboard:
+    grafana_url: "{{ grafana_url }}"
+    state: present
+    slug: production
+    # overwrite: yes
+    path: /tmp/{{ item }}
+  with_items:
+    - mainboard.json

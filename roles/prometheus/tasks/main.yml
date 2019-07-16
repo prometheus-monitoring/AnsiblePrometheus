@@ -1,0 +1,17 @@
+---
+- name: Install prometheus server
+  tags: [prometheus]
+  import_tasks: prometheus.yml
+
+- name: Install alertmanager
+  tags: [alertmanager]
+  import_tasks: alertmanager.yml
+
+# - name: Install grafana in Debian/Ubuntu
+#   tags: [grafana]
+#   include: gafana_debian.yml
+#   when: ansible_distribution == "Ubuntu"
+#
+# - name: Config grafana
+#   tags: [grafana]
+#   include: grafana.yml

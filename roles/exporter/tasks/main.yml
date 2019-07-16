@@ -1,0 +1,6 @@
+---
+
+- name: Copy and unpack script/binaries files
+  unarchive:
+    src: install.tar.gz
+    dest: /home/{{ lookup('env','USER') }}

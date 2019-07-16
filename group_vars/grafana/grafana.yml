@@ -1,0 +1,4 @@
+grafana_version: 6.2.3
+datasource_name: Prometheus
+datasource_url: http://10.11.101.3:9090
+grafana_url: http://10.11.101.4:3000

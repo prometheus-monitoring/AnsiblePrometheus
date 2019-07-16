@@ -1,0 +1,13 @@
+---
+- name: Create user group "prometheus"
+  group:
+    name: prometheus
+    state: present
+
+- name: Create prometheus user
+  user:
+    name: prometheus
+    group: prometheus
+    create_home: yes
+    shell: /bin/false
+    state: present

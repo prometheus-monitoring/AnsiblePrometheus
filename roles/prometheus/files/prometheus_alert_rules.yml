@@ -1,0 +1,305 @@
+groups:
+  - name: Alert Rules Server
+    rules:
+    - alert: "[CRITICAL] Host Down"
+      expr: up == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Server {{$labels.instance}}({{$labels.ip_priv}}) has been down"
+    - alert: "[WARNING] CPU Utilization"
+      expr: total_cpu_utilization_system_user > 70 and  total_cpu_utilization_system_user <= 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Total CPU utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[ERROR] CPU Utilization"
+      expr: total_cpu_utilization_system_user > 80 and  total_cpu_utilization_system_user <= 85
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Total CPU utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[CRITICAL] CPU Utilization"
+      expr: total_cpu_utilization_system_user > 85
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Total CPU utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[WARNING] Memory Usage"
+      expr: memory_usage > 80 and  memory_usage <= 90
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Memory on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[ERROR] Memory Usage"
+      expr: memory_usage > 90 and  memory_usage <= 95
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Memory on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[CRITICAL] Memory Usage"
+      expr: memory_usage > 95
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Memory on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[WARNING] Disk Full"
+      expr: disk_space_used_usage > 80 and  disk_space_used_usage <= 90
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Disk space on server {{$labels.instance}}({{$labels.ip_priv}}) is {{ humanize $value }}% full"
+    - alert: "[ERROR] Disk Full"
+      expr: disk_space_used_usage > 90 and  disk_space_used_usage <= 95
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Disk space on server {{$labels.instance}}({{$labels.ip_priv}}) is {{ humanize $value }}% full"
+    - alert: "[CRITICAL] Disk Full"
+      expr: disk_space_used_usage > 95
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Disk space on server {{$labels.instance}}({{$labels.ip_priv}}) is {{ humanize $value }}% full"
+    - alert: "[WARNING] Disk IO Utilization"
+      expr: disk_io_utilization > 80 and  disk_io_utilization <= 90
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "IO disk utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[ERROR] Disk IO Utilization"
+      expr: disk_io_utilization > 90 and  disk_io_utilization < 100
+      for: 10m
+      labels:
+        severity: error
+      annotations:
+        summary: "IO disk utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[CRITICAL] Disk IO Utilization"
+      expr: disk_io_utilization >= 100
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        summary: "IO disk utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
+    - alert: "[WARNING] Swap Space Usage"
+      expr: swap_space_usage > 40 and  swap_space_usage <= 50
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[ERROR] Swap Space Usage"
+      expr: swap_space_usage > 50 and  swap_space_usage <= 60
+      for: 10m
+      labels:
+        severity: error
+      annotations:
+        summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[CRITICAL] Swap Space Usage"
+      expr: swap_space_usage > 60
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[ERROR] Server Load"
+      expr: node_load5 > 5
+      for: 10m
+      labels:
+        severity: error
+      annotations:
+        summary: "Load average 5m is {{ humanize $value }} on server {{$labels.instance}}({{$labels.ip_priv}})"
+    - alert: "[WARNING] Network Traffic In"
+      expr: network_traffic_in / 10^6 > 700 and  network_traffic_in / 10^6 <= 700
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Speed receive of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s "
+    - alert: "[ERROR] Network Traffic In"
+      expr: network_traffic_in / 10^6 > 750 and  network_traffic_in / 10^6 <= 800
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Speed receive of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s"
+    - alert: "[CRITICAL] Network Traffic In"
+      expr: network_traffic_in / 10^6 > 800
+      labels:
+        severity: critical
+      annotations:
+        summary: "Speed receive of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s"
+    - alert: "[WARNING] Network Traffic Out"
+      expr: network_traffic_out / 10^6 > 700 and  network_traffic_out / 10^6 <= 750
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Speed transmit of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s"
+    - alert: "[ERROR] Network Traffic Out"
+      expr: network_traffic_out / 10^6 > 750 and  network_traffic_out / 10^6 <= 800
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Speed transmit of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s"
+    - alert: "[CRITICAL] Network Traffic Out"
+      expr: network_traffic_out / 10^6 > 800
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Speed transmit of network traffic on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}MB/s"
+  - name: Alert Rules Couchbase
+    rules:
+    - alert: "[WARNING] RAM Quota Used"
+      expr: cb_bucket_ram_quota_percent_used > 70 and  cb_bucket_ram_quota_percent_used <= 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "RAM quota of bucket {{$labels.bucket}} on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[ERROR] RAM Quota Used"
+      expr: cb_bucket_ram_quota_percent_used > 80 and  cb_bucket_ram_quota_percent_used <= 85
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "RAM quota of bucket {{$labels.bucket}} on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[CRITICAL] RAM Quota Used"
+      expr: cb_bucket_ram_quota_percent_used > 85
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "RAM quota of bucket {{$labels.bucket}} on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+  - name: Alert Rules Service
+    rules:
+    - alert: "[CRITICAL] Service Down"
+      expr:   sum(namedprocess_namegroup_states) by(instance, groupname) == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Service {{$labels.groupname}} down on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    # - alert: "[WARNING] CPU Service Usage"
+    #   expr: cpu_service_usage > 70 and cpu_service_usage <= 80
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    # - alert: "[ERROR] CPU Service Usage"
+    #   expr: cpu_service_usage > 80 and cpu_service_usage <= 85
+    #   for: 5m
+    #   labels:
+    #     severity: error
+    #   annotations:
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    # - alert: "[CRITICAL] CPU Service Usage"
+    #   expr: cpu_service_usage > 85
+    #   for: 5m
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    - alert: "[ERROR] CPU Service Usage"
+      expr: cpu_service_usage_diff_24h > 20
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%) on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    - alert: "[WARNING] Memory Service Usage"
+      expr: memory_service_usage > 70 and memory_service_usage <= 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    - alert: "[ERROR] Memory Service Usage"
+      expr: memory_service_usage > 80 and memory_service_usage <= 85
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    - alert: "[CRITICAL] Memory Service Usage"
+      expr: memory_service_usage > 85
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+  - name: Alert Rules CCU
+    rules:
+    # - alert: "[WARNING] TCP Connections Established"
+    #   expr: avg_tcp_estab_percentage_different_5m > 10
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
+    - alert: "[WARNING] TCP Connections Established"
+      expr: tcp_estab_diff_5m < -10
+      labels:
+        severity: warning
+      annotations:
+        summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+    - alert: "[CRITICAL] TCP Connections Established"
+      for: 1m
+      expr: gt_gs1_ccuEst == 0
+      labels:
+        severity: critical
+      annotations:
+        summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) down to 0."
+    # - alert: "[WARNING] CCU "
+    #   expr: avg_ccu_percentage_different_5m > 10
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
+    - alert: "[WARNING] CCU "
+      expr: ccu_diff_1m < -10
+      labels:
+        severity: warning
+      annotations:
+        summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+    - alert: "[CRITICAL] CCU "
+      expr: gt_gs1_ccu == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) down to 0."
+  - name: Alert Rules Network
+    rules:
+      - alert: "[WARNING] Network Latency Lost Package"
+        expr: ping_loss_percent > 0.1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Package on server {{$labels.instance}}({{$labels.ip_priv}}) ping to {{$labels.target}} loss {{humanize $value}}%"
+      - alert: "[ERROR] Response Code"
+        expr: httpstats_api_status_code != 200
+        labels:
+          severity: error
+        annotations:
+          summary: "{{$labels.name}} with response code {{$value}}"
+      - alert: "[ERROR] Response Time"
+        expr: httpstats_api_total / (60*10^3) > 1
+        labels:
+          severity: error
+        annotations:
+          summary: "{{$labels.name}} with response time {{humanize $value}}s"

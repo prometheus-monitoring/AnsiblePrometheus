@@ -1,0 +1,8 @@
+---
+- name: Create new user
+  tags: [users]
+  import_tasks: user.yml
+
+# - name: Install nginx
+#   tags: [nginx_install]
+#   import_tasks: nginx.yml

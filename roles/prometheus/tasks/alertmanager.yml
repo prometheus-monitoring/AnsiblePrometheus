@@ -1,0 +1,68 @@
+---
+
+# - name:  source alertmanager
+#   get_url:
+#     url: https://github.com/prometheus/alertmanager/releases/download/v{{alertmanager_version}}/alertmanager-{{alertmanager_version}}.linux-amd64.tar.gz
+#     dest: /home/{{ lookup('env','USER') }}
+    # checksum: "{{ alertmanager_sha256sum }}"
+
+- name: Download and Unpack alertmanager file
+  unarchive:
+    src: https://github.com/prometheus/alertmanager/releases/download/v{{alertmanager_version}}/alertmanager-{{alertmanager_version}}.linux-amd64.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy binaries file into /usr/local/bin
+  copy:
+    src: /tmp/alertmanager-{{alertmanager_version}}.linux-amd64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0755
+    remote_src: yes
+  with_items:
+    - alertmanager
+    - amtool
+
+- name: Delete other files not use
+  file:
+    path: /tmp/{{ item }}
+    state: absent
+  with_items:
+    # - alertmanager-{{alertmanager_version}}.linux-amd64.tar.gz
+    - alertmanager-{{alertmanager_version}}.linux-amd64
+
+- name: Make directory for config and data
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0755
+  with_items:
+    - /etc/alertmanager
+
+- name: Create alertmanager systemd service
+  template:
+    src: alertmanager/alertmanager_service.j2
+    dest: /etc/systemd/system/alertmanager.service
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+- name: Start alertmanager systemd
+  systemd:
+    name: alertmanager
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    masked: no
+
+- name: Copy alertmanager config file
+  tags: [alertmanager_config]
+  template:
+    src: alertmanager/alertmanager_config.j2
+    dest: /etc/alertmanager/config.yml
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    # validate: /usr/local/bin/amtool check-config %s
+  # notify: Restart alertmanager

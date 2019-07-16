@@ -1,0 +1,6 @@
+prometheus_version: 2.10.0
+prometheus_domain: http://10.11.101.3:9090
+# prometheus_sha256sum_url: https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/sha256sums.txt
+# prometheus_sha256sum: "sha256:{{lookup('url', prometheus_sha256sum_url)}}"
+prometheus_user: prometheus
+prometheus_group: prometheus
