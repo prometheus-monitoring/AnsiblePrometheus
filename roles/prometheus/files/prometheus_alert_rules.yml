@@ -233,21 +233,21 @@ groups:
       labels:
         severity: warning
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[ERROR] Memory Service Usage"
       expr: memory_service_usage > 80 and memory_service_usage <= 85
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[CRITICAL] Memory Service Usage"
       expr: memory_service_usage > 85
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[ERROR] Openfile Ratio"
       expr: namedprocess_namegroup_worst_fd_ratio > 50
       labels:
