@@ -269,7 +269,7 @@ groups:
     #   annotations:
     #     summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "[WARNING] TCP Connections Established"
-      expr: tcp_estab_diff_1d < -10
+      expr: tcp_estab_diff_1d < -30
       labels:
         severity: warning
       annotations:
@@ -288,7 +288,7 @@ groups:
     #   annotations:
     #     summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "[WARNING] CCU "
-      expr: ccu_diff_1d < -10
+      expr: ccu_diff_1d < -30
       labels:
         severity: warning
       annotations:
