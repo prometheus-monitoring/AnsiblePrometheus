@@ -184,64 +184,82 @@ groups:
         severity: critical
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
+    - alert: "[ERROR] Resident Bucket"
+      expr: cb_bucketstats_vb_active_resident_items_ratio <= 90
+      labels:
+        severity: error
+      annotations:
+        summary: "Resident bucket {{$labels.bucket}} on server {{$labels.instance}}({{$labels.ip_priv}}) down to {{humanize $value}}%"
   - name: Alert Rules Service
     rules:
     - alert: "[CRITICAL] Service Down"
-      expr:   sum(namedprocess_namegroup_states) by(instance, groupname) == 0
+      expr:   sum(namedprocess_namegroup_states) by(instance, groupname, ip, ip_priv) == 0
       for: 1m
       labels:
         severity: critical
       annotations:
-        summary: "Service {{$labels.groupname}} down on server {{$labels.instance}} ({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} down on server {{$labels.instance}}({{$labels.ip_priv}})"
     # - alert: "[WARNING] CPU Service Usage"
     #   expr: cpu_service_usage > 70 and cpu_service_usage <= 80
     #   for: 5m
     #   labels:
     #     severity: warning
     #   annotations:
-    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
     # - alert: "[ERROR] CPU Service Usage"
     #   expr: cpu_service_usage > 80 and cpu_service_usage <= 85
     #   for: 5m
     #   labels:
     #     severity: error
     #   annotations:
-    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
     # - alert: "[CRITICAL] CPU Service Usage"
     #   expr: cpu_service_usage > 85
     #   for: 5m
     #   labels:
     #     severity: critical
     #   annotations:
-    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+    #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[ERROR] CPU Service Usage"
       expr: cpu_service_usage_diff_24h > 20
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%) on server {{$labels.instance}} ({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%) on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[WARNING] Memory Service Usage"
       expr: memory_service_usage > 70 and memory_service_usage <= 80
       for: 5m
       labels:
         severity: warning
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[ERROR] Memory Service Usage"
       expr: memory_service_usage > 80 and memory_service_usage <= 85
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
     - alert: "[CRITICAL] Memory Service Usage"
       expr: memory_service_usage > 85
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}} ({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
+    - alert: "[ERROR] Openfile Ratio"
+      expr: namedprocess_namegroup_worst_fd_ratio > 50
+      labels:
+        severity: error
+      annotations:
+        summary: "Open file ratio of service {{$labels.groupname}} on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%."
+    - alert: "[ERROR] Process restarted"
+      expr: namedprocess_namegroup_oldest_start_time_seconds != namedprocess_namegroup_oldest_start_time_seconds offset 1m
+      labels:
+        severity: error
+      annotations:
+        summary: "Service {{$labels.groupname}} on server {{$labels.instance}}({{$labels.ip_priv}}) restarted at {{ humanizeTimestamp $value}}"
   - name: Alert Rules CCU
     rules:
     # - alert: "[WARNING] TCP Connections Established"
@@ -249,39 +267,39 @@ groups:
     #   labels:
     #     severity: warning
     #   annotations:
-    #     summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
+    #     summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "[WARNING] TCP Connections Established"
-      expr: tcp_estab_diff_5m < -10
+      expr: tcp_estab_diff_1d < -10
       labels:
         severity: warning
       annotations:
-        summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+        summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
     - alert: "[CRITICAL] TCP Connections Established"
       for: 1m
       expr: gt_gs1_ccuEst == 0
       labels:
         severity: critical
       annotations:
-        summary: "TCP connections current established on server {{$labels.instance}} ({{$labels.ip_priv}}) down to 0."
+        summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
     # - alert: "[WARNING] CCU "
     #   expr: avg_ccu_percentage_different_5m > 10
     #   labels:
     #     severity: warning
     #   annotations:
-    #     summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
+    #     summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "[WARNING] CCU "
-      expr: ccu_diff_1m < -10
+      expr: ccu_diff_1d < -10
       labels:
         severity: warning
       annotations:
-        summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+        summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
     - alert: "[CRITICAL] CCU "
       expr: gt_gs1_ccu == 0
       for: 1m
       labels:
         severity: critical
       annotations:
-        summary: "The number of CCU on server {{$labels.instance}} ({{$labels.ip_priv}}) down to 0."
+        summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
   - name: Alert Rules Network
     rules:
       - alert: "[WARNING] Network Latency Lost Package"
@@ -298,7 +316,7 @@ groups:
         annotations:
           summary: "{{$labels.name}} with response code {{$value}}"
       - alert: "[ERROR] Response Time"
-        expr: httpstats_api_total / (60*10^3) > 1
+        expr: httpstats_api_total / 10^3 > 3
         labels:
           severity: error
         annotations:

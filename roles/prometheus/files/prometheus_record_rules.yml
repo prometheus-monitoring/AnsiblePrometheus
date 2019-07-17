@@ -2,7 +2,7 @@ groups:
   - name: Record Rules Server
     rules:
     - record: "total_cpu_utilization_system_user"
-      expr: ((avg by(instance, job) (irate(node_cpu_seconds_total{mode="user"}[5m]))) + (avg by(instance, job) (irate(node_cpu_seconds_total{mode="system"}[5m])))) * 100
+      expr: ((avg by(instance, job, ip, ip_priv) (irate(node_cpu_seconds_total{mode="user"}[5m]))) + (avg by(instance, job, ip, ip_priv) (irate(node_cpu_seconds_total{mode="system"}[5m])))) * 100
     - record: "memory_usage"
       expr: (1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes)) * 100
     - record: "disk_space_used"
@@ -22,15 +22,15 @@ groups:
     - record: "cpu_service_usage_diff_24h"
       expr: cpu_service_usage - cpu_service_usage offset 24h
     - record: "memory_service_usage"
-      expr: (namedprocess_namegroup_memory_bytes{memtype="resident"} / ignoring(memtype, groupname) group_left node_memory_MemTotal_bytes)*100
+      expr: sum by(groupname, instance, ip, ip_priv, job)(namedprocess_namegroup_memory_bytes{memtype!="swapped"} / ignoring(memtype, groupname) group_left node_memory_MemTotal_bytes)*100
   - name: Record Rules CCU
     rules:
     # - record: "avg_ccu_percentage_different_5m"
     #   expr: ( 1 - gt_gs1_ccu / avg_over_time(gt_gs1_ccu[5m])) * 100
     # - record: "avg_tcp_estab_percentage_different_5m"
     #   expr: ( 1 - gt_gs1_ccuEst / avg_over_time(gt_gs1_ccuEst[5m])) * 100
-    - record: "ccu_diff_1m"
-      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1m) / gt_gs1_ccu offset 1m) * 100
-    - record: "tcp_estab_diff_1m"
-      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1m) / gt_gs1_ccuEst offset 1m) * 100
+    - record: "ccu_diff_1d"
+      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1d) / gt_gs1_ccu offset 1m) * 100
+    - record: "tcp_estab_diff_1d"
+      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1d) / gt_gs1_ccuEst offset 1m) * 100
   # - name: Record Rules Network
