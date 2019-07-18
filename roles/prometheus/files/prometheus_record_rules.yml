@@ -22,7 +22,7 @@ groups:
     - record: "cpu_service_usage_diff_24h"
       expr: cpu_service_usage - cpu_service_usage offset 24h
     - record: "memory_service_usage"
-      expr: (namedprocess_namegroup_memory_bytes{memtype="resident"} / on(groupname, instance, ip, ip_priv) namedprocess_namegroup_memory_bytes{memtype="virtual"})*100
+      expr: (namedprocess_namegroup_memory_bytes{memtype="resident"} / on(groupname, instance, ip, ip_priv, product_code) namedprocess_namegroup_memory_bytes{memtype="virtual"})*100
   - name: Record Rules CCU
     rules:
     # - record: "avg_ccu_percentage_different_5m"
