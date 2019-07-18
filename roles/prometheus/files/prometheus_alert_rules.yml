@@ -93,28 +93,28 @@ groups:
       annotations:
         summary: "IO disk utilization on server {{$labels.instance}}({{$labels.ip_priv}}) reaches {{ humanize $value }}%"
     - alert: "[WARNING] Swap Space Usage"
-      expr: swap_space_usage > 40 and  swap_space_usage <= 50
+      expr: swap_space_usage > 40 and  swap_space_usage <= 50 and on() hour() >= 17 <= 23
       for: 10m
       labels:
         severity: warning
       annotations:
         summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
     - alert: "[ERROR] Swap Space Usage"
-      expr: swap_space_usage > 50 and  swap_space_usage <= 60
+      expr: swap_space_usage > 50 and  swap_space_usage <= 60 and on() hour() >= 17 <= 23
       for: 10m
       labels:
         severity: error
       annotations:
         summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
     - alert: "[CRITICAL] Swap Space Usage"
-      expr: swap_space_usage > 60
+      expr: swap_space_usage > 60 and on() hour() >= 17 <= 23
       for: 10m
       labels:
         severity: critical
       annotations:
         summary: "Swap on server {{$labels.instance}}({{$labels.ip_priv}}) used {{ humanize $value }}%"
     - alert: "[ERROR] Server Load"
-      expr: node_load5 > 5
+      expr: node_load5 > 5 and on() hour() >= 17 <= 23
       for: 10m
       labels:
         severity: error
