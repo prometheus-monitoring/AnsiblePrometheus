@@ -273,14 +273,14 @@ groups:
       labels:
         severity: warning
       annotations:
-        summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 day ago ({{humanize $value}}%)."
     - alert: "[CRITICAL] TCP Connections Established"
       for: 1m
       expr: gt_gs1_ccuEst == 0
       labels:
         severity: critical
       annotations:
-        summary: "TCP connections current established on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
+        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
     # - alert: "[WARNING] CCU "
     #   expr: avg_ccu_percentage_different_5m > 10
     #   labels:
@@ -292,14 +292,14 @@ groups:
       labels:
         severity: warning
       annotations:
-        summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 minutes ago ({{humanize $value}}%)."
+        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} on server {{$labels.instance}}({{$labels.ip_priv}}) lower than value on 1 day ago ({{humanize $value}}%)."
     - alert: "[CRITICAL] CCU "
       expr: gt_gs1_ccu == 0
       for: 1m
       labels:
         severity: critical
       annotations:
-        summary: "The number of CCU on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
+        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} on server {{$labels.instance}}({{$labels.ip_priv}}) down to 0."
   - name: Alert Rules Network
     rules:
       - alert: "[WARNING] Network Latency Lost Package"
