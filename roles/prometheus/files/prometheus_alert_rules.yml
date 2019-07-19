@@ -56,21 +56,21 @@ groups:
       labels:
         severity: warning
       annotations:
-        summary: "Disk space is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[ERROR] Disk Full"
       expr: disk_space_used > 90 <= 95
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Disk space is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[CRITICAL] Disk Full"
       expr: disk_space_used > 95
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Disk space is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[WARNING] Disk IO Utilization"
       expr: disk_io_utilization > 80 <= 90
       for: 10m
