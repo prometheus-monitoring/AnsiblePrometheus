@@ -6,7 +6,7 @@ groups:
     - record: "memory_usage"
       expr: (1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes)) * 100
     - record: "disk_space_used"
-      expr: (1 - ((node_filesystem_free_bytes{device!~"rootfs",mountpoint="/"}) / node_filesystem_size_bytes{device!~"rootfs",mountpoint="/"})) * 100
+      expr: (1 - node_filesystem_avail_bytes / node_filesystem_size_bytes) *100
     - record: "disk_io_utilization"
       expr: irate(node_disk_io_time_seconds_total{device!~"^(md\\\\d+$|dm-)"}[5m])
     - record: "swap_space_usage"
@@ -18,11 +18,12 @@ groups:
   - name: Record Rules Service
     rules:
     - record: "cpu_service_usage"
-      expr: ((sum by (groupname) (rate(namedprocess_namegroup_cpu_seconds_total[5m]))) / on (groupname) group_right namedprocess_namegroup_num_procs) * 100
+      # expr: ((sum by (groupname) (rate(namedprocess_namegroup_cpu_seconds_total[1m]))) / on (groupname) group_right namedprocess_namegroup_num_procs) * 100
+      expr: ((sum by(groupname, instance, ip, ip_priv, product_code) (rate(namedprocess_namegroup_cpu_seconds_total[1m]))) / on(groupname, instance, ip, ip_priv, product_code) namedprocess_namegroup_num_procs  / on( instance, ip, ip_priv, product_code) group_left() count(count(node_cpu_seconds_total) by (cpu,groupname, instance, ip, ip_priv, product_code)) by (groupname, instance, ip, ip_priv, product_code) ) * 100
     - record: "cpu_service_usage_diff_24h"
       expr: cpu_service_usage - cpu_service_usage offset 24h
     - record: "memory_service_usage"
-      expr: (namedprocess_namegroup_memory_bytes{memtype="virtual",product_code="MPGSN", memtype="virtual"}  / on(instance, ip, ip_priv, product_code) group_left() node_memory_MemTotal_bytes) * 100
+      expr: (namedprocess_namegroup_memory_bytes{memtype="resident"}  / on(instance, ip, ip_priv, product_code) group_left() node_memory_MemTotal_bytes) * 100
   - name: Record Rules CCU
     rules:
     # - record: "avg_ccu_percentage_different_5m"

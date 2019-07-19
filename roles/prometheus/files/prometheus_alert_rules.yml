@@ -51,21 +51,21 @@ groups:
       annotations:
         summary: "Memory used {{ humanize $value }}%"
     - alert: "[WARNING] Disk Full"
-      expr: disk_space_used_usage > 80 <= 90
+      expr: disk_space_used > 80 <= 90
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Disk space is {{ humanize $value }}% full"
     - alert: "[ERROR] Disk Full"
-      expr: disk_space_used_usage > 90 <= 95
+      expr: disk_space_used > 90 <= 95
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Disk space is {{ humanize $value }}% full"
     - alert: "[CRITICAL] Disk Full"
-      expr: disk_space_used_usage > 95
+      expr: disk_space_used > 95
       for: 5m
       labels:
         severity: critical
