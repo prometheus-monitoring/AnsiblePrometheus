@@ -56,21 +56,21 @@ groups:
       labels:
         severity: warning
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[ERROR] Disk Full"
       expr: disk_space_used > 90 <= 95
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[CRITICAL] Disk Full"
       expr: disk_space_used > 95
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$lables.mountpoint}} is {{ humanize $value }}% full"
+        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
     - alert: "[WARNING] Disk IO Utilization"
       expr: disk_io_utilization > 80 <= 90
       for: 10m
@@ -164,21 +164,21 @@ groups:
   - name: Alert Rules Couchbase
     rules:
     - alert: "[WARNING] RAM Quota Used"
-      expr: cb_bucket_ram_quota_percent_used > 70 <= 80
+      expr: cb_bucket_ram_quota_percent_used > 80 <= 85
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
     - alert: "[ERROR] RAM Quota Used"
-      expr: cb_bucket_ram_quota_percent_used > 80 <= 85
+      expr: cb_bucket_ram_quota_percent_used > 85 <= 90
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
     - alert: "[CRITICAL] RAM Quota Used"
-      expr: cb_bucket_ram_quota_percent_used > 85
+      expr: cb_bucket_ram_quota_percent_used > 90
       for: 5m
       labels:
         severity: critical
