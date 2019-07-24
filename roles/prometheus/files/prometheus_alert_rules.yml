@@ -1,160 +1,160 @@
 groups:
   - name: Alert Rules Server
     rules:
-    - alert: "[CRITICAL] Host Down"
+    - alert: "Host Down"
       expr: up == 0
       for: 1m
       labels:
         severity: critical
       annotations:
         summary: "Server has been down"
-    - alert: "[WARNING] CPU Utilization"
+    - alert: "CPU Utilization"
       expr: total_cpu_utilization_system_user > 70 <= 80
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Total CPU utilization reaches {{ humanize $value }}%"
-    - alert: "[ERROR] CPU Utilization"
+    - alert: "CPU Utilization"
       expr: total_cpu_utilization_system_user > 80 <= 85
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Total CPU utilization reaches {{ humanize $value }}%"
-    - alert: "[CRITICAL] CPU Utilization"
+    - alert: "CPU Utilization"
       expr: total_cpu_utilization_system_user > 85
       for: 5m
       labels:
         severity: critical
       annotations:
         summary: "Total CPU utilization reaches {{ humanize $value }}%"
-    - alert: "[WARNING] Memory Usage"
+    - alert: "Memory Usage"
       expr: memory_usage > 80 <= 90
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Memory used {{ humanize $value }}%"
-    - alert: "[ERROR] Memory Usage"
+    - alert: "Memory Usage"
       expr: memory_usage > 90 <= 95
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Memory used {{ humanize $value }}%"
-    - alert: "[CRITICAL] Memory Usage"
+    - alert: "Memory Usage"
       expr: memory_usage > 95
       for: 5m
       labels:
         severity: critical
       annotations:
         summary: "Memory used {{ humanize $value }}%"
-    - alert: "[WARNING] Disk Full"
+    - alert: "Disk Full"
       expr: disk_space_used > 80 <= 90
       for: 5m
       labels:
         severity: warning
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
-    - alert: "[ERROR] Disk Full"
+        summary: "Disk space of device {{$labels.device}} is {{ humanize $value }}% full"
+    - alert: "Disk Full"
       expr: disk_space_used > 90 <= 95
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
-    - alert: "[CRITICAL] Disk Full"
+        summary: "Disk space of device {{$labels.device}} is {{ humanize $value }}% full"
+    - alert: "Disk Full"
       expr: disk_space_used > 95
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Disk space of device {{$labels.device}} with mountpoint {{$labels.mountpoint}} is {{ humanize $value }}% full"
-    - alert: "[WARNING] Disk IO Utilization"
+        summary: "Disk space of device {{$labels.device}} is {{ humanize $value }}% full"
+    - alert: "Disk IO Utilization"
       expr: disk_io_utilization > 80 <= 90
       for: 10m
       labels:
         severity: warning
       annotations:
         summary: "IO disk utilization reaches {{ humanize $value }}%"
-    - alert: "[ERROR] Disk IO Utilization"
+    - alert: "Disk IO Utilization"
       expr: disk_io_utilization > 90 < 100
       for: 10m
       labels:
         severity: error
       annotations:
         summary: "IO disk utilization reaches {{ humanize $value }}%"
-    - alert: "[CRITICAL] Disk IO Utilization"
+    - alert: "Disk IO Utilization"
       expr: disk_io_utilization >= 100
       for: 10m
       labels:
         severity: critical
       annotations:
         summary: "IO disk utilization reaches {{ humanize $value }}%"
-    - alert: "[WARNING] Swap Space Usage"
-      expr: swap_space_usage > 40 <= 50 and on() hour() >= 17 <= 23
+    - alert: "Swap Space Usage"
+      expr: swap_space_usage > 40 <= 50 and on() (hour() <= 17 or hour() >= 23)
       for: 10m
       labels:
         severity: warning
       annotations:
         summary: "Swap used {{ humanize $value }}%"
-    - alert: "[ERROR] Swap Space Usage"
-      expr: swap_space_usage > 50 <= 60 and on() hour() >= 17 <= 23
+    - alert: "Swap Space Usage"
+      expr: swap_space_usage > 50 <= 60 and on() (hour() <= 17 or hour() >= 23)
       for: 10m
       labels:
         severity: error
       annotations:
         summary: "Swap used {{ humanize $value }}%"
-    - alert: "[CRITICAL] Swap Space Usage"
-      expr: swap_space_usage > 60 and on() hour() >= 17 <= 23
+    - alert: "Swap Space Usage"
+      expr: swap_space_usage > 60 and on() (hour() <= 17 or hour() >= 23)
       for: 10m
       labels:
         severity: critical
       annotations:
         summary: "Swap used {{ humanize $value }}%"
-    - alert: "[ERROR] Server Load"
-      expr: node_load5 > 5 and on() hour() >= 17 <= 23
+    - alert: "Server Load"
+      expr: node_load5 > 5 and on() (hour() <= 17 or hour() >= 23)
       for: 10m
       labels:
         severity: error
       annotations:
         summary: "Load average 5m is {{ humanize $value }} on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[WARNING] Network Traffic In"
+    - alert: "Network Traffic In"
       expr: network_traffic_in / 10^6 > 700 <= 750
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Speed receive of network traffic reaches {{ humanize $value }}MB/s "
-    - alert: "[ERROR] Network Traffic In"
+    - alert: "Network Traffic In"
       expr: network_traffic_in / 10^6 > 750 <= 800
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Speed receive of network traffic reaches {{ humanize $value }}MB/s"
-    - alert: "[CRITICAL] Network Traffic In"
+    - alert: "Network Traffic In"
       expr: network_traffic_in / 10^6 > 800
       labels:
         severity: critical
       annotations:
         summary: "Speed receive of network traffic reaches {{ humanize $value }}MB/s"
-    - alert: "[WARNING] Network Traffic Out"
+    - alert: "Network Traffic Out"
       expr: network_traffic_out / 10^6 > 700 <= 750
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Speed transmit of network traffic reaches {{ humanize $value }}MB/s"
-    - alert: "[ERROR] Network Traffic Out"
+    - alert: "Network Traffic Out"
       expr: network_traffic_out / 10^6 > 750 <= 800
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Speed transmit of network traffic reaches {{ humanize $value }}MB/s"
-    - alert: "[CRITICAL] Network Traffic Out"
+    - alert: "Network Traffic Out"
       expr: network_traffic_out / 10^6 > 800
       for: 5m
       labels:
@@ -163,28 +163,28 @@ groups:
         summary: "Speed transmit of network traffic reaches {{ humanize $value }}MB/s"
   - name: Alert Rules Couchbase
     rules:
-    - alert: "[WARNING] RAM Quota Used"
+    - alert: "RAM Quota Used"
       expr: cb_bucket_ram_quota_percent_used > 80 <= 85
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
-    - alert: "[ERROR] RAM Quota Used"
+    - alert: "RAM Quota Used"
       expr: cb_bucket_ram_quota_percent_used > 85 <= 90
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
-    - alert: "[CRITICAL] RAM Quota Used"
+    - alert: "RAM Quota Used"
       expr: cb_bucket_ram_quota_percent_used > 90
       for: 5m
       labels:
         severity: critical
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
-    - alert: "[ERROR] Resident Bucket"
+    - alert: "Resident Bucket"
       expr: cb_bucketstats_vb_active_resident_items_ratio <= 90 != 0
       labels:
         severity: error
@@ -192,108 +192,120 @@ groups:
         summary: "Resident bucket {{$labels.bucket}} down to {{humanize $value}}%"
   - name: Alert Rules Service
     rules:
-    - alert: "[CRITICAL] Service Down"
-      expr:   sum(namedprocess_namegroup_states) by(instance, groupname, ip, ip_priv, product_code) == 0
+    - alert: "Service Down"
+      expr:   sum(namedprocess_namegroup_states) by(instance, groupname, ip, ip_priv, product_code, job) == 0
       for: 1m
       labels:
         severity: critical
       annotations:
         summary: "Service {{$labels.groupname}} down on server {{$labels.instance}}({{$labels.ip_priv}})"
-    # - alert: "[WARNING] CPU Service Usage"
+    # - alert: "CPU Service Usage"
     #   expr: cpu_service_usage > 70 and cpu_service_usage <= 80
     #   for: 5m
     #   labels:
     #     severity: warning
     #   annotations:
     #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
-    # - alert: "[ERROR] CPU Service Usage"
+    # - alert: "CPU Service Usage"
     #   expr: cpu_service_usage > 80 and cpu_service_usage <= 85
     #   for: 5m
     #   labels:
     #     severity: error
     #   annotations:
     #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
-    # - alert: "[CRITICAL] CPU Service Usage"
+    # - alert: "CPU Service Usage"
     #   expr: cpu_service_usage > 85
     #   for: 5m
     #   labels:
     #     severity: critical
     #   annotations:
     #     summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of CPU on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[ERROR] CPU Service Usage"
+    - alert: "CPU Service Usage"
       expr: cpu_service_usage_diff_24h > 20
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%) on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[WARNING] Memory Service Usage"
+    - alert: "Memory Service Usage"
       expr: memory_service_usage > 70 <= 80
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[ERROR] Memory Service Usage"
+    - alert: "Memory Service Usage"
       expr: memory_service_usage > 80 <= 85
       for: 5m
       labels:
         severity: error
       annotations:
         summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[CRITICAL] Memory Service Usage"
+    - alert: "Memory Service Usage"
       expr: memory_service_usage > 85
       for: 5m
       labels:
         severity: critical
       annotations:
         summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
-    - alert: "[ERROR] Openfile Ratio"
+    - alert: "Openfile Ratio"
       expr: namedprocess_namegroup_worst_fd_ratio > 50
       labels:
         severity: error
       annotations:
         summary: "Open file ratio of service {{$labels.groupname}} reaches {{ humanize $value }}%."
-    - alert: "[ERROR] Process restarted"
+    - alert: "Process restarted"
       expr: namedprocess_namegroup_oldest_start_time_seconds != namedprocess_namegroup_oldest_start_time_seconds offset 1m
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} restarted at {{ humanizeTimestamp $value}}"
+        summary: "Service {{$labels.groupname}} has been restarted"
   - name: Alert Rules CCU
     rules:
-    # - alert: "[WARNING] TCP Connections Established"
+    # - alert: "TCP Connections Established"
     #   expr: avg_tcp_estab_percentage_different_5m > 10
     #   labels:
     #     severity: warning
     #   annotations:
     #     summary: "TCP connections current established lower than average 3 minutes ago ({{humanize $value}}%)."
-    - alert: "[WARNING] TCP Connections Established"
+    - alert: "TCP Connections Established"
       expr: tcp_estab_diff_1d < -30
       labels:
         severity: warning
       annotations:
         summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} lower than value on 1 day ago ({{humanize $value}}%)."
-    - alert: "[CRITICAL] TCP Connections Established"
+    - alert: "TCP Connections Established"
+      expr: tcp_estab_diff_1d > 30
+      labels:
+        severity: warning
+      annotations:
+        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} higher than value on 1 day ago ({{humanize $value}}%)."
+    - alert: "TCP Connections Established"
       for: 1m
       expr: gt_gs1_ccuEst == 0
       labels:
         severity: critical
       annotations:
         summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} down to 0."
-    # - alert: "[WARNING] CCU "
+    # - alert: "CCU "
     #   expr: avg_ccu_percentage_different_5m > 10
     #   labels:
     #     severity: warning
     #   annotations:
     #     summary: "The number of CCU lower than average 3 minutes ago ({{humanize $value}}%)."
-    - alert: "[WARNING] CCU "
+    - alert: "CCU "
       expr: ccu_diff_1d < -30
       labels:
         severity: warning
       annotations:
         summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} lower than value on 1 day ago ({{humanize $value}}%)."
-    - alert: "[CRITICAL] CCU "
+    - alert: "CCU "
+      expr: ccu_diff_1d > 30
+      labels:
+        severity: warning
+      annotations:
+        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} higher than value on 1 day ago ({{humanize $value}}%)."
+    - alert: "CCU "
       expr: gt_gs1_ccu == 0
       for: 1m
       labels:
@@ -302,20 +314,20 @@ groups:
         summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} down to 0."
   - name: Alert Rules Network
     rules:
-      - alert: "[WARNING] Network Latency Lost Package"
+      - alert: "Network Latency Lost Package"
         expr: ping_loss_percent > 0.1
         for: 1m
         labels:
           severity: warning
         annotations:
           summary: "Package ping to {{$labels.target}} loss {{humanize $value}}%"
-      - alert: "[ERROR] Response Code"
+      - alert: "Response Code"
         expr: httpstats_api_status_code != 200
         labels:
           severity: error
         annotations:
           summary: "{{$labels.name}} with response code {{$value}}"
-      - alert: "[ERROR] Response Time"
+      - alert: "Response Time"
         expr: httpstats_api_total / 10^3 > 3
         labels:
           severity: error

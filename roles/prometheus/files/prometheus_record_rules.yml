@@ -6,7 +6,7 @@ groups:
     - record: "memory_usage"
       expr: (1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes)) * 100
     - record: "disk_space_used"
-      expr: (1 - node_filesystem_avail_bytes / node_filesystem_size_bytes) *100
+      expr: (1 - node_filesystem_avail_bytes{device=~"/dev/.*"} / node_filesystem_size_bytes{device=~"/dev/.*"}) *100
     - record: "disk_io_utilization"
       expr: irate(node_disk_io_time_seconds_total{device!~"^(md\\\\d+$|dm-)"}[5m])
     - record: "swap_space_usage"
@@ -31,7 +31,7 @@ groups:
     # - record: "avg_tcp_estab_percentage_different_5m"
     #   expr: ( 1 - gt_gs1_ccuEst / avg_over_time(gt_gs1_ccuEst[5m])) * 100
     - record: "ccu_diff_1d"
-      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1d) / gt_gs1_ccu offset 1m) * 100
+      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1d) / gt_gs1_ccu offset 1d) * 100
     - record: "tcp_estab_diff_1d"
-      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1d) / gt_gs1_ccuEst offset 1m) * 100
+      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1d) / gt_gs1_ccuEst offset 1d) * 100
   # - name: Record Rules Network
