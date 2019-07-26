@@ -270,16 +270,18 @@ groups:
     #     summary: "TCP connections current established lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "TCP Connections Established"
       expr: tcp_estab_diff_1d < -30
+      for: 1m
       labels:
         severity: warning
       annotations:
-        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} lower than value on 1 day ago ({{humanize $value}}%)."
+        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} lower than value on 1 day ago ( {{printf `gt_gs1_ccuEst{instance=~'%s'}` $labels.instance | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s'}` $labels.instance | query | first | value | humanize}} : {{humanize $value}}% )."
     - alert: "TCP Connections Established"
       expr: tcp_estab_diff_1d > 30
+      for: 1m
       labels:
         severity: warning
       annotations:
-        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} higher than value on 1 day ago ({{humanize $value}}%)."
+        summary: "TCP connections current established of {{$labels.code}}_socketID:{{$labels.sid}} higher than value on 1 day ago ( {{printf `gt_gs1_ccuEst{instance=~'%s'}` $labels.instance | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s'}` $labels.instance | query | first | value | humanize}} : {{humanize $value}}% )."
     - alert: "TCP Connections Established"
       for: 1m
       expr: gt_gs1_ccuEst == 0
@@ -295,16 +297,18 @@ groups:
     #     summary: "The number of CCU lower than average 3 minutes ago ({{humanize $value}}%)."
     - alert: "CCU "
       expr: ccu_diff_1d < -30
+      for: 1m
       labels:
         severity: warning
       annotations:
-        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} lower than value on 1 day ago ({{humanize $value}}%)."
+        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} lower than 1 day ago ( {{printf `gt_gs1_ccu{instance=~'%s'}` $labels.instance | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s'}` $labels.instance | query | first | value | humanize}} : {{humanize $value}}% )."
     - alert: "CCU "
       expr: ccu_diff_1d > 30
+      for: 1m
       labels:
         severity: warning
       annotations:
-        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} higher than value on 1 day ago ({{humanize $value}}%)."
+        summary: "The number CCU of {{$labels.code}}_socketID:{{$labels.sid}} higher than 1 day ago ( {{printf `gt_gs1_ccu{instance=~'%s'}` $labels.instance | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s'}` $labels.instance | query | first | value | humanize}} : {{humanize $value}}% )."
     - alert: "CCU "
       expr: gt_gs1_ccu == 0
       for: 1m
