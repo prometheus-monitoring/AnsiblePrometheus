@@ -1,52 +1,60 @@
 global:
-  smtp_from: alertmanager@gmail.com
-  smtp_smarthost: smtp.gmail.com:587
+  smtp_from: gsn.monitor@vng.com.vn
+  smtp_smarthost: 120.138.72.150:2525
+  smtp_hello: mto.zing.vn
+  smtp_auth_username: gsn.monitor@vng.com.vn
+  smtp_require_tls: false
+
 receivers:
-- name: "emailSE"
-  email_configs:
-{% for receiver in emailSE %}
-  - to: {{ receiver.to }}
-{% endfor %}
+#- name: "emailSE"
+#  email_configs:
+#{% for receiver in emailSE %}
+#  - to: {{ receiver.to }}
+#{% endfor %}
+
 - name: "groupAlert"
   webhook_configs:
 {% for receiver in url_webhook_group %}
-  - url: {{ receiver.url }}
+  - url: "{{ receiver.url }}"
+    send_resolved: false
 {% endfor %}
-- name: "groupAndCall"
-  webhook_configs:
-{% for receiver in url_webhook_call %}
-  - url: {{ receiver.url }}
-{% endfor %}
+#- name: "groupAndCall"
+#  webhook_configs:
+#{% for receiver in url_webhook_call %}
+#  - url: {{ receiver.url }}
+#    send_resolved: false 
+#{% endfor %}
 
 route:
-  receiver: "default"
-  group_by: ['alertname']
-  group_wait: 30s
-  group_interval: 5m
+  receiver: "groupAlert"
+  group_by: ['ip_priv', ]
+#  group_wait: 30s
+#  group_interval: 5m
   repeat_interval: 5h
-  routes:
-  - receiver: emailSE
-    match:
-      severity: error
-  - receiver: groupAlert
-    match:
-      severity: warning
-  - receiver: groupAndCall
-    match:
-      severity: critical
+#  routes:
+#  - receiver: emailSE
+#    match:
+#      severity: error
+#  - receiver: groupAlert
+#    match:
+#      severity: warning
+#  - receiver: groupAndCall
+#    match:
+#      severity: critical
 
-inhibit_rules:
-  - source_match:
-      severity: critical
-    target_match:
-      severity: warning
-    equal: ['alertname', 'ip', 'instance']
-  - source_match:
-      severity: critical
-    target_match:
-      severity: error
-    equal: ['alertname', 'ip', 'instance']  - source_match:
-      severity: warning
-    target_match:
-      severity: error
-    equal: ['alertname', 'ip', 'instance']
+#inhibit_rules:
+#  - source_match:
+#      severity: critical
+#    target_match:
+#      severity: warning
+#    equal: ['alertname', 'ip', 'instance']
+#  - source_match:
+#      severity: critical
+#    target_match:
+#      severity: error
+#    equal: ['alertname', 'ip', 'instance', 'product_code']
+#  - source_match:
+#      severity: warning
+#    target_match:
+#      severity: error
+#    equal: ['alertname', 'ip', 'instance', 'product_code']

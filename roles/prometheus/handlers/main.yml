@@ -14,7 +14,7 @@
 
 - name: Reload prometheus
   command: curl -X POST http://localhost:9090/-/reload
-  # when: prometheus_status.stdout.find("running") != -1 #running
+  when: prometheus_status.stdout.find("running") != -1 #running
 
 - name: Restart alertmanager
   service:

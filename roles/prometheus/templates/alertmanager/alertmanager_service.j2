@@ -10,7 +10,7 @@ Type=simple
 WorkingDirectory=/etc/alertmanager/
 ExecStart=/usr/local/bin/alertmanager \
           --config.file=/etc/alertmanager/config.yml \
-          --web.external-url {{ alertmanager_domain }}
+          --web.external-url http://{{ alertmanager_addr }}
 
 [Install]
 WantedBy=multi-user.target

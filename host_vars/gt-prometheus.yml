@@ -1,0 +1,14 @@
+domain: core-prometheus.mto.zing.vn
+prometheus_addr: 10.11.101.3:9090
+alertmanager_addr: 10.11.101.3:9093
+targets:
+  alertmanagers:
+    - addr: 10.11.101.3:9093
+  prometheus:
+    - addr: 10.11.101.3:9090
+url_webhook_group:
+  - url: https://chat-demo.mto.zing.vn/bot/alertmanager
+url_webhook_call:
+  - url:
+emailSE:
+  - to: SEGS1@gmail.com

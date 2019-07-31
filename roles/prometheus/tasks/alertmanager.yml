@@ -64,5 +64,5 @@
     dest: /etc/alertmanager/config.yml
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
-    # validate: /usr/local/bin/amtool check-config %s
-  # notify: Restart alertmanager
+    validate: /usr/local/bin/amtool check-config %s
+  notify: Restart alertmanager

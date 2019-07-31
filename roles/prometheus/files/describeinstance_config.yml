@@ -1,0 +1,21 @@
+credentials:
+  aws: "<path credentials aws>"
+  gcp: "<path credentials gcp>"
+  mysql:
+    remote_host:  "<ip address>"
+    user: "<user database>"
+    password: "<password user>"
+    name: "<database name>"
+
+# Do not use same field in each math/not_match at the same time
+filter:
+  match:
+    status: ["<server state>"]
+    product: ["<productAlias>"]
+    selv1: ["<domain>"]
+    ip: ["<ip address>"]
+  not_match:
+    status: ["<server state>"]
+    product: ["<productAlias>"]
+    selv1: ["<domain>"]
+    ip: ["<ip address>"]

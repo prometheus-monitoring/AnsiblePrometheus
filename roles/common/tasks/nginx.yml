@@ -1,7 +1,55 @@
 ---
 - name: Install nginx
-  apt:
+  yum:
     name: nginx
-    update_cache: yes
-    cache_valid_time: 3600
     state: present
+
+- name: Ensure directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 644
+  with_items:
+    - /etc/nginx/ssl
+
+- name: Create empty file htpasswd
+  file:
+    path: /etc/nginx/.{{domain.split(".")[0]}}_htpasswd
+    state: touch
+    owner: root
+    group: root
+    mode: 644
+
+- name: Copy ssl certificate and key
+  copy:
+    src: "nginx/ssl.{{item}}"
+    dest: "/etc/nginx/ssl/{{domain}}.{{item}}"
+    owner: root
+    group: root
+    mode: 644
+  with_items:
+    - crt
+    - key
+
+- name: Create dhparam file for more secure SSL
+  shell: openssl dhparam -out /etc/nginx/dhparam.pem 2048
+  creates: /etc/nginx/dhparam.pem
+
+- name: Secure dhparam file
+  file:
+    path: /etc/nginx/dhparam.pem
+    state: file
+    group: root
+    owner: root
+    mode: 0400
+
+- name: Config reverse proxy
+  template:
+    src: reverse_proxy.j2
+    dest: "/etc/nginx/conf.d/{{domain}}.conf"
+    owner: root
+    group: root
+    mode: 644
+  notify: Restart nginx

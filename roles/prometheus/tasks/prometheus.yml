@@ -23,14 +23,6 @@
     - prometheus
     - promtool
 
-- name: Delete other files not use
-  file:
-    path: /tmp/{{ item }}
-    state: absent
-  with_items:
-    # - prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
-    - prometheus-{{ prometheus_version }}.linux-amd64
-
 - name: Make directory for config and data
   file:
     path: "{{ item }}"
@@ -42,14 +34,68 @@
     - /var/lib/prometheus
     - /etc/prometheus
     - /etc/prometheus/rules
+    - /etc/describeInstance
+    - /usr/local/scripts
 
-- name: Add targets
-  tags: [targets]
-  template:
-    src: prometheus/prometheus_target.j2
-    dest: /etc/prometheus/targets.json
+- name: Copy console libraries prometheus
+  command: cp -ru /tmp/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }} /etc/prometheus/{{ item }}
+  with_items:
+    - consoles
+    - console_libraries
+
+- name: Grant user/group for console libraries
+  command:  "sudo chown -R {{ prometheus_user }}:{{ prometheus_group }} /etc/prometheus/{{ item }}"
+  with_items:
+    - consoles
+    - console_libraries
+
+- name: Delete other files not use
+  file:
+    path: /tmp/{{ item }}
+    state: absent
+  with_items:
+    # - prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
+    - prometheus-{{ prometheus_version }}.linux-amd64
+
+- name: Copy script auto get targets
+  tags: [describeinstance]
+  copy:
+    src: DescribeInstance.bin
+    dest: /usr/local/bin/DescribeInstance
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
+
+- name: Copy sample describeinstance file config
+  tags: [describeinstance]
+  copy:
+    src: describeinstance_config.yml
+    dest: /etc/describeInstance/config.yml
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+- name: Set crontab to get instance
+  tags: [describeinstance]
+  cron:
+    name: "Get all describe instance from aws, gcp and database mysql."
+    user: "{{prometheus_user}}"
+    minute: 0
+    job: "/usr/local/bin/DescribeInstance -d all -c /etc/describeInstance/config.yml 2>&1 | tee -a /var/log/descibeInstance_output.log"
+
+- name: Copy script backup targets
+  tags: [describeinstance]
+  copy:
+    src: backuptargets.sh
+    dest: /usr/local/scripts/backuptargets.sh
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+- name: Set crontab to backup target files
+  tags: [describeinstance]
+  cron:
+    name: "Backup target files"
+    user: "{{prometheus_user}}"
+    minute: 30
+    job: "/usr/local/scripts/backuptargets.sh 2>&1 | tee -a /var/log/backuptargets.log"
 
 - name: Add alert rules
   tags: [alerts]

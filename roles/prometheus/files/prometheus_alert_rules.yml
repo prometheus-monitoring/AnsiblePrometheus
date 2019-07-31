@@ -332,7 +332,7 @@ groups:
         annotations:
           summary: "{{$labels.name}} with response code {{$value}}"
       - alert: "Response Time"
-        expr: httpstats_api_total / 10^3 > 3
+        expr: max_over_time(httpstats_api_total[1m]) / 10^3 > 3
         labels:
           severity: error
         annotations:

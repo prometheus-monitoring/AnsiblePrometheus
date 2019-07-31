@@ -9,5 +9,6 @@
     name: prometheus
     group: prometheus
     create_home: yes
-    shell: /bin/false
+    home: /home/prometheus
+    shell: /bin/bash
     state: present

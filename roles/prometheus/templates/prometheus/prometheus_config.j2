@@ -2,11 +2,11 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
-  alerting:
-    alertmanagers:
-     - schema: http
-       static_configs:
-       - targets: [{%for target in targets.alertmanagers %}'{{target.addr}}'{% if not loop.last %},{% endif %}{%endfor%}]
+alerting:
+  alertmanagers:
+   - scheme: http
+     static_configs:
+     - targets: [{%for target in targets.alertmanagers %}'{{target.addr}}'{% if not loop.last %},{% endif %}{%endfor%}]
 
 rule_files:
   - /etc/prometheus/rules/record_rules.yml
@@ -15,33 +15,38 @@ rule_files:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['10.11.101.3:9090']
+      - targets: [{%for target in targets.prometheus %}'{{target.addr}}'{% if not loop.last %},{% endif %}{%endfor%}]
   - job_name: 'alertmanager'
     static_configs:
-      - targets: ['10.11.101.3:9093']
+      - targets: [{%for target in targets.alertmanagers %}'{{target.addr}}'{% if not loop.last %},{% endif %}{%endfor%}]
   - job_name: 'aws'
     static_configs:
     file_sd_configs:
     - files:
       - /etc/prometheus/targets/targets_aws.json
+      - /etc/prometheus/targets/targets_manual_aws.json
   - job_name: 'gcp'
     static_configs:
     file_sd_configs:
     - files:
       - /etc/prometheus/targets/targets_gcp.json
+      - /etc/prometheus/targets/targets_manual_gcp.json
   - job_name: 'vng_oldfarm'
     proxy_url: http://120.138.72.146:3128
     static_configs:
     file_sd_configs:
     - files:
       - /etc/prometheus/targets/targets_vng_oldfarm.json
+      - /etc/prometheus/targets/targets_manual_vng_oldfarm.json
   - job_name: 'vng_newfarm'
     static_configs:
     file_sd_configs:
     - files:
       - /etc/prometheus/targets/targets_vng_newfarm.json
+      - /etc/prometheus/targets/targets_manual_vng_newfarm.json
   - job_name: 'vng_singapore'
     static_configs:
     file_sd_configs:
     - files:
       - /etc/prometheus/targets/targets_vng_singapore.json
+      - /etc/prometheus/targets/targets_manual_vng_singapore.json
