@@ -3,7 +3,7 @@ groups:
     rules:
     - alert: "Host Down"
       expr: up == 0
-      for: 1m
+      for: 3m
       labels:
         severity: critical
       annotations:
@@ -136,6 +136,7 @@ groups:
         summary: "Speed receive of network traffic reaches {{ humanize $value }}MB/s"
     - alert: "Network Traffic In"
       expr: network_traffic_in / 10^6 > 800
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -161,6 +162,12 @@ groups:
         severity: critical
       annotations:
         summary: "Speed transmit of network traffic reaches {{ humanize $value }}MB/s"
+    - alert: "Missing Metric"
+      expr: absent(httpstats_api_dns_lookup{code="ZPTGSN"}) == 1
+      labels:
+        severity: critical
+      annotations:
+        summary: "Metric missing from product code {{$labels.code}}"
   - name: Alert Rules Couchbase
     rules:
     - alert: "RAM Quota Used"

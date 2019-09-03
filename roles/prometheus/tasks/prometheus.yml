@@ -108,7 +108,7 @@
   with_items:
     - record_rules
     - alert_rules
-  notify: Reload prometheus
+  notify: reload prometheus
 
 - name: Copy prometheus config file
   tags: [prometheus_config]
@@ -118,7 +118,7 @@
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
     validate: /usr/local/bin/promtool check config %s
-  notify: Reload prometheus
+  notify: reload prometheus
 
 - name: Create prometheus systemd service
   template:

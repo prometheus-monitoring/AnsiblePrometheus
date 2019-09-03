@@ -5,16 +5,20 @@
     name: prometheus
     state: started
     enabled: yes
+
+- name: Check prometheus is running
+  command: systemctl status prometheus
+  changed_when: false
   register: prometheus_status
+
+- name: reload prometheus
+  command: curl -X POST http://localhost:9090/-/reload
+  # when: prometheus_status.stdout.find("running") != -1 #running
 
 - name: Restart prometheus
   service:
     name: prometheus
     state: restarted
-
-- name: Reload prometheus
-  command: curl -X POST http://localhost:9090/-/reload
-  when: prometheus_status.stdout.find("running") != -1 #running
 
 - name: Restart alertmanager
   service:
