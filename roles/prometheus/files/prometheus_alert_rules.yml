@@ -191,6 +191,13 @@ groups:
         severity: critical
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
+    - alert: "Cache Miss Ratio"
+      for: 1m
+      expr: avg(cb_bucketstats_ep_bg_fetched) by (bucket, instance, product_code, ip, ip_priv) / (avg(cb_bucketstats_cmd_get) by (bucket, instance, product_code, ip, ip_priv) * 100) > 0
+      labels:
+        serverity: warning
+      annotations:
+        summary: "Cache bucket {{$labels.bucket}} missed"
     - alert: "Resident Bucket"
       expr: cb_bucketstats_vb_active_resident_items_ratio <= 90 != 0
       labels:
@@ -331,7 +338,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Package ping to {{$labels.target}} loss {{humanize $value}}%"
+          summary: 'Package ping to {{$labels.target}} loss {{ $value | printf "%2.f"}}%'
       - alert: "Response Code"
         expr: httpstats_api_status_code != 200
         labels:
