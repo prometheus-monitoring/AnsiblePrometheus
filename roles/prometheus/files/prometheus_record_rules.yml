@@ -30,12 +30,23 @@ groups:
     #   expr: ( 1 - gt_gs1_ccu / avg_over_time(gt_gs1_ccu[5m])) * 100
     # - record: "avg_tcp_estab_percentage_different_5m"
     #   expr: ( 1 - gt_gs1_ccuEst / avg_over_time(gt_gs1_ccuEst[5m])) * 100
-    - record: "ccu_diff_1d"
-      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1d) / gt_gs1_ccu offset 1d) * 100
+
+    # ========  CCU ========
     - record: "ccu_offset_1d"
       expr: gt_gs1_ccu offset 1d
-    - record: "tcp_estab_diff_1d"
-      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1d) / gt_gs1_ccuEst offset 1d) * 100
+    - record: "ccu_avg_7d_ago"
+      expr: (gt_gs1_ccu offset 1d + gt_gs1_ccu offset 2d + gt_gs1_ccu offset 3d + gt_gs1_ccu offset 4d + gt_gs1_ccu offset 5d + gt_gs1_ccu offset 6d + gt_gs1_ccu offset 7d) / 7
+    - record: "ccu_diff_1d"
+      expr: (( gt_gs1_ccu - gt_gs1_ccu offset 1d) / gt_gs1_ccu offset 1d) * 100
+    - record: "ccu_diff_avg_7d_ago"
+      expr: (( gt_gs1_ccu - ccu_avg_7d_ago) / ccu_avg_7d_ago) * 100
+    # ========  TCP Established ========
     - record: "tcp_estab_offset_1d"
       expr: gt_gs1_ccuEst offset 1d
+    - record: "tcp_estab_avg_7d_ago"
+      expr: (gt_gs1_ccuEst offset 1d + gt_gs1_ccuEst offset 2d +gt_gs1_ccuEst offset 3d + gt_gs1_ccuEst offset 4d + gt_gs1_ccuEst offset 5d + gt_gs1_ccuEst offset 6d + gt_gs1_ccuEst offset 7d) / 7
+    - record: "tcp_estab_diff_1d"
+      expr: (( gt_gs1_ccuEst - gt_gs1_ccuEst offset 1d) / gt_gs1_ccuEst offset 1d) * 100
+    - record: "tcp_estab_diff_avg_7d_ago"
+      expr: (( gt_gs1_ccuEst - tcp_estab_avg_7d_ago) / tcp_estab_avg_7d_ago) * 100
   # - name: Record Rules Network
