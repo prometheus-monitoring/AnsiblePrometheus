@@ -351,49 +351,49 @@ groups:
         summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} giảm so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= Inscrease CCU =================
     # ====== 1d ago ======
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_1d >= 60  and (gt_gs1_ccuEst >= 200 and gt_gs1_ccuEst < 500)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_1d >= 50 and (gt_gs1_ccuEst >= 500 and gt_gs1_ccuEst < 2000)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_1d >= 40 and gt_gs1_ccuEst >= 2000
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_1d >= 60  and (gt_gs1_ccuEst >= 200 and gt_gs1_ccuEst < 500)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_1d >= 50 and (gt_gs1_ccuEst >= 500 and gt_gs1_ccuEst < 2000)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_1d >= 40 and gt_gs1_ccuEst >= 2000
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ====== 1w(7d) ago ======
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_avg_7d_ago >= 60  and (gt_gs1_ccuEst >= 200 and gt_gs1_ccuEst < 500)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_avg_7d_ago >= 50 and (gt_gs1_ccuEst >= 500 and gt_gs1_ccuEst < 2000)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "TCP Connections Established"
-      expr: tcp_estab_diff_avg_7d_ago >= 40 and gt_gs1_ccuEst >= 2000
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_avg_7d_ago >= 60  and (gt_gs1_ccuEst >= 200 and gt_gs1_ccuEst < 500)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_avg_7d_ago >= 50 and (gt_gs1_ccuEst >= 500 and gt_gs1_ccuEst < 2000)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "TCP Connections Established"
+    #   expr: tcp_estab_diff_avg_7d_ago >= 40 and gt_gs1_ccuEst >= 2000
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= TCP Established == 0 =================
     - alert: "TCP Connections Established"
       for: 1m
@@ -476,49 +476,49 @@ groups:
         summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} giảm so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= Inscrease CCU =================
     # ====== 1d ago ======
-    - alert: "CCU"
-      expr: ccu_diff_1d >= 60 and (gt_gs1_ccu >= 200 and gt_gs1_ccu < 500)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "CCU"
-      expr: ccu_diff_1d >= 50 and (gt_gs1_ccu >= 500 and gt_gs1_ccu < 2000)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "CCU"
-      expr: ccu_diff_1d >= 40 and gt_gs1_ccu >= 2000
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_1d >= 60 and (gt_gs1_ccu >= 200 and gt_gs1_ccu < 500)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_1d >= 50 and (gt_gs1_ccu >= 500 and gt_gs1_ccu < 2000)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_1d >= 40 and gt_gs1_ccu >= 2000
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với 1 ngày trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_offset_1d{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ====== 1w(7d) ago ======
-    - alert: "CCU"
-      expr: ccu_diff_avg_7d_ago >= 60 and (gt_gs1_ccu >= 200 and gt_gs1_ccu < 500)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s',code=~'%s'}` $labels.instance $labels.code $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "CCU"
-      expr: ccu_diff_avg_7d_ago >= 50 and (gt_gs1_ccu >= 500 and gt_gs1_ccu < 2000)
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
-    - alert: "CCU"
-      expr: ccu_diff_avg_7d_ago >= 40 and gt_gs1_ccu >= 2000
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_avg_7d_ago >= 60 and (gt_gs1_ccu >= 200 and gt_gs1_ccu < 500)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s',code=~'%s'}` $labels.instance $labels.code $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_avg_7d_ago >= 50 and (gt_gs1_ccu >= 500 and gt_gs1_ccu < 2000)
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
+    # - alert: "CCU"
+    #   expr: ccu_diff_avg_7d_ago >= 40 and gt_gs1_ccu >= 2000
+    #   for: 1m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= CCU == 0 =================
     - alert: "CCU"
       expr: gt_gs1_ccu == 0
