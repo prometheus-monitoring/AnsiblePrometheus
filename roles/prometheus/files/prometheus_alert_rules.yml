@@ -194,11 +194,11 @@ groups:
     #Ratio of reads per second to this bucket which required a read from disk rather than RAM.
     - alert: "Cache Miss Ratio"
       for: 1m
-      expr: avg(cb_bucketstats_ep_bg_fetched) by (bucket, instance, product_code, ip, ip_priv) / (avg(cb_bucketstats_cmd_get) by (bucket, instance, product_code, ip, ip_priv) * 100) > 0
+      expr: rate(cb_bucketstats_ep_cache_miss_rate{instance="$instance"}[5m]) > 1
       labels:
         severity: warning
       annotations:
-        summary: "Cache bucket {{$labels.bucket}} missed"
+        summary: "Cache bucket {{$labels.bucket}} missed {{ humanize $value }}%"
     - alert: "Resident Bucket"
       expr: cb_bucketstats_vb_active_resident_items_ratio <= 90 != 0
       labels:
