@@ -119,7 +119,7 @@ groups:
       labels:
         severity: error
       annotations:
-        summary: "Load average 5m is {{ humanize $value }} on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Load average 5m is {{ humanize $value }}"
     - alert: "Network Traffic In"
       expr: network_traffic_in / 10^6 > 700 <= 750
       for: 5m
@@ -191,11 +191,12 @@ groups:
         severity: critical
       annotations:
         summary: "RAM quota of bucket {{$labels.bucket}} used {{ humanize $value }}%"
+    #Ratio of reads per second to this bucket which required a read from disk rather than RAM.
     - alert: "Cache Miss Ratio"
       for: 1m
       expr: avg(cb_bucketstats_ep_bg_fetched) by (bucket, instance, product_code, ip, ip_priv) / (avg(cb_bucketstats_cmd_get) by (bucket, instance, product_code, ip, ip_priv) * 100) > 0
       labels:
-        serverity: warning
+        severity: warning
       annotations:
         summary: "Cache bucket {{$labels.bucket}} missed"
     - alert: "Resident Bucket"
@@ -212,7 +213,7 @@ groups:
       labels:
         severity: critical
       annotations:
-        summary: "Service {{$labels.groupname}} down on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} down"
     # - alert: "CPU Service Usage"
     #   expr: cpu_service_usage > 70 and cpu_service_usage <= 80
     #   for: 5m
@@ -240,28 +241,28 @@ groups:
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%) on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used CPU higher than 24 hours ago ({{humanize $value}}%)"
     - alert: "Memory Service Usage"
       expr: memory_service_usage > 70 <= 80
       for: 5m
       labels:
         severity: warning
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory"
     - alert: "Memory Service Usage"
       expr: memory_service_usage > 80 <= 85
       for: 5m
       labels:
         severity: error
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory"
     - alert: "Memory Service Usage"
       expr: memory_service_usage > 85
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory on server {{$labels.instance}}({{$labels.ip_priv}})"
+        summary: "Service {{$labels.groupname}} used {{ humanize $value }}% of memory"
     - alert: "Openfile Ratio"
       expr: namedprocess_namegroup_worst_fd_ratio > 50
       labels:
@@ -269,7 +270,7 @@ groups:
       annotations:
         summary: "Open file ratio of service {{$labels.groupname}} reaches {{ humanize $value }}%."
     - alert: "Process restarted"
-      expr: namedprocess_namegroup_oldest_start_time_seconds != namedprocess_namegroup_oldest_start_time_seconds offset 1m
+      expr: namedprocess_namegroup_oldest_start_time_seconds > namedprocess_namegroup_oldest_start_time_seconds offset 30s
       labels:
         severity: error
       annotations:
@@ -395,13 +396,13 @@ groups:
     #   annotations:
     #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng TCP connections established trung bình 1 tuần trước ( {{printf `gt_gs1_ccuEst{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `tcp_estab_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= TCP Established == 0 =================
-    - alert: "TCP Connections Established"
-      for: 1m
-      expr: gt_gs1_ccuEst == 0
-      labels:
-        severity: critical
-      annotations:
-        summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} đã giảm xuống còn 0."
+    # - alert: "TCP Connections Established"
+    #   for: 1m
+    #   expr: gt_gs1_ccuEst{code!="coccm"} == 0
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     summary: "Số lượng TCP connections established của {{$labels.code}}_socketID:{{$labels.sid}} đã giảm xuống còn 0."
     # - alert: "CCU"
     #   expr: avg_ccu_percentage_different_5m > 10
     #   labels:
@@ -520,8 +521,15 @@ groups:
     #   annotations:
     #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} tăng so với số lượng CCU trung bình 1 tuần trước ( {{printf `gt_gs1_ccu{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}}/{{printf `ccu_avg_7d_ago{instance=~'%s',code=~'%s'}` $labels.instance $labels.code | query | first | value | humanize}} : {{humanize $value}}% )."
     # ================= CCU == 0 =================
+    # - alert: "CCU"
+    #   expr: gt_gs1_ccu{code!="coccm"} == 0
+    #   for: 1m
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     summary: "Số lượng CCU của {{$labels.code}}_socketID:{{$labels.sid}} đã giảm xuống còn 0."
     - alert: "CCU"
-      expr: gt_gs1_ccu == 0
+      expr: gt_gs1_ccu == 0 and gt_gs1_ccuEst == 0
       for: 1m
       labels:
         severity: critical
@@ -530,12 +538,12 @@ groups:
   - name: Alert Rules Network
     rules:
       - alert: "Network Latency Lost Package"
-        expr: ping_loss_percent > 0.1
+        expr: ping_loss_percent * 100 > 5
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: 'Package ping to {{$labels.target}} loss {{ $value | printf "%.2f"}}%'
+          summary: 'Package ping from {{$labels.instance}} to {{$labels.target}} loss {{ $value | printf "%.2f"}}%'
       - alert: "Response Code"
         expr: httpstats_api_status_code != 200
         labels:

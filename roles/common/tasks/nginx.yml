@@ -34,8 +34,9 @@
     - key
 
 - name: Create dhparam file for more secure SSL
-  shell: openssl dhparam -out /etc/nginx/dhparam.pem 2048
-  creates: /etc/nginx/dhparam.pem
+  shell:
+    cmd: openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    creates: /etc/nginx/dhparam.pem
 
 - name: Secure dhparam file
   file:
